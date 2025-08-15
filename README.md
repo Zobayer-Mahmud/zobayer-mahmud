@@ -13,7 +13,7 @@ Currently diving into native iOS development and exploring app architecture.
 
 - 👨‍💻 All of my projects are available at [https://zobayer.vercel.app/](https://zobayer.vercel.app/)
 
-- 📝 I regularly write articles on [https://zobayer.vercel.app/](https://zobayer.vercel.app/)
+- 📝 I regularly write articles on [Dev.to](https://dev.to/zobayer_mahmud) and [Medium](https://medium.com/@zobayer-mahmud)
 
 - 💬 Ask me about **mobile app development, Flutter, Kotlin, Jetpack Compose, React Native, Swift, Firebase, and app architecture.**
 
@@ -30,9 +30,13 @@ Currently diving into native iOS development and exploring app architecture.
 
 ---
 
-### Blogs posts
+### 📝 Latest Dev.to Posts
 <!-- BLOG-POST-LIST:START -->
 <!-- BLOG-POST-LIST:END -->
+
+### 📝 Latest Medium Posts
+<!-- MEDIUM-POST-LIST:START -->
+<!-- MEDIUM-POST-LIST:END -->
 
 ---
 
