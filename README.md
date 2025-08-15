@@ -30,13 +30,9 @@ Currently diving into native iOS development and exploring app architecture.
 
 ---
 
-### 📝 Latest Dev.to Posts
+### 📝 Latest Blog Posts
 <!-- BLOG-POST-LIST:START -->
 <!-- BLOG-POST-LIST:END -->
-
-### 📝 Latest Medium Posts
-<!-- MEDIUM-POST-LIST:START -->
-<!-- MEDIUM-POST-LIST:END -->
 
 ---
 
