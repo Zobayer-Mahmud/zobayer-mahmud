@@ -1,0 +1,56 @@
+name: Update Blog Posts
+
+on:
+  schedule:
+    - cron: '0 12 * * *' # Runs every day at 12:00 UTC
+  workflow_dispatch:
+
+jobs:
+  update-blogs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      # Fetch Medium RSS
+      - name: Fetch Medium RSS as JSON
+        uses: jeffreytse/medium-rss-to-json-action@v1
+        id: medium
+        with:
+          rss_url: 'https://medium.com/feed/@zobayer-mahmud'
+          limit: 5
+
+      # Fetch Dev.to posts
+      - name: Fetch Dev.to posts
+        id: devto
+        run: |
+          echo "::set-output name=json::$(curl -s https://dev.to/api/articles?username=zobayer_mahmud | jq -c '.[:5]')"
+
+      # Update README
+      - name: Update README with latest blogs
+        run: |
+          echo '<!-- BLOG-POST-LIST:START -->' > temp.md
+
+          # Medium posts
+          echo "${{ steps.medium.outputs.json }}" | jq -r '.items[] | "- [" + .title + "](" + .link + ") (Medium)"' >> temp.md
+
+          # Dev.to posts
+          echo "${{ steps.devto.outputs.json }}" | jq -r '.[] | "- [" + .title + "](" + .url + ") (Dev.to)"' >> temp.md
+
+          echo '<!-- BLOG-POST-LIST:END -->' >> temp.md
+
+          # Replace section in README
+          sed -i.bak '/<!-- BLOG-POST-LIST:START -->/,/<!-- BLOG-POST-LIST:END -->/c\
+<!-- BLOG-POST-LIST:START -->\n'"$(cat temp.md | sed ':a;N;$!ba;s/\n/\\n/g')"'\
+<!-- BLOG-POST-LIST:END -->' README.md
+
+          rm temp.md
+
+      # Commit & push
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add README.md
+          git commit -m "Update blog posts [skip ci]" || echo "No changes to commit"
+          git push
