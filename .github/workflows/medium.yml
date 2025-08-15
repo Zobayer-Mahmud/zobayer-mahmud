@@ -12,25 +12,27 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v3
 
-      - name: Fetch Medium RSS
+      - name: Fetch Medium RSS as JSON
         uses: jeffreytse/medium-rss-to-json-action@v1
         id: rss
         with:
           rss_url: 'https://medium.com/feed/@zobayer-mahmud'
           limit: 5
 
-      - name: Update README
+      - name: Update README with latest Medium posts
         run: |
           echo '<!-- MEDIUM-POST-LIST:START -->' > temp.md
           echo "${{ steps.rss.outputs.json }}" | jq -r '.items[] | "- [" + .title + "](" + .link + ")"' >> temp.md
           echo '<!-- MEDIUM-POST-LIST:END -->' >> temp.md
-          
-          # Insert into README
-          awk '/<!-- MEDIUM-POST-LIST:START -->/,/<!-- MEDIUM-POST-LIST:END -->/{if(/START/){print; system("cat temp.md"); next} if(/END/){next}}1' README.md > README_new.md
-          mv README_new.md README.md
+
+          # Replace old section in README
+          sed -i.bak '/<!-- MEDIUM-POST-LIST:START -->/,/<!-- MEDIUM-POST-LIST:END -->/c\
+<!-- MEDIUM-POST-LIST:START -->\n'"$(cat temp.md | sed ':a;N;$!ba;s/\n/\\n/g')"'\
+<!-- MEDIUM-POST-LIST:END -->' README.md
+
           rm temp.md
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
